@@ -1,0 +1,70 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:fragment="end">
+
+<th:block th:fragment="boardComment">
+    <div class="col-md-12 ml-auto mr-auto">
+        <div class="media-area">
+            <div class="media" th:each="item : ${itemLst}">
+                <a class="float-left" href="#pablo">
+                    <div class="avatar">
+                        <img class="media-object" alt="64x64"
+                             src="/img/faces/kendall.jpg">
+                    </div>
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        [[${item.UserId}]] <small >· [[${item.RegDate}]]</small>
+                    </h4>
+                    <p th:utext="${item.Content}"></p>
+
+                    <div class="media-footer">
+                        <a href="#pablo" class="btn btn-danger btn-link float-right">
+                            <i class="material-icons">favorite</i>  0
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-area" th:if="${#lists.size(itemLst) > 0}">
+                <ul class="pagination justify-content-center text-center">
+                    <li class="page-item">
+                        <a class="page-link" th:onclick="|fnComents(${pagination.prevBlock})|" href="javascript:void(0);"  aria-label="Previous">
+                            <span aria-hidden="true"><<</span>
+                        </a>
+                    </li>
+                    <th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+                        <li th:class="|page-item ${pagination.page == pageButton ? ' active' : ''}|"  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"  th:each="pageButton : ${#numbers.sequence(start, end)}">
+                            <a class="page-link"  th:onclick="|fnComents(${pageButton})|" href="javascript:void(0);"  th:text="${pageButton}"></a>
+                        </li>
+                    </th:block>
+                    <li class="page-item">
+                        <a class="page-link" th:onclick="|fnComents(${pagination.nextBlock})|" href="javascript:void(0);"  aria-label="Next">
+                            <span aria-hidden="true">>></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="media media-post">
+            <a class="author float-left" href="#pablo">
+                <div class="avatar">
+                    <img class="media-object" alt="64x64" src="/img/faces/avatar.jpg">
+                </div>
+            </a>
+            <div class="media-body">
+                                        <span class="bmd-form-group"><textarea id="txtcomment" class="form-control"
+                                                                               placeholder="댓글..."
+                                                                               rows="2"></textarea></span>
+                <div class="media-footer">
+                    <a href="javascript:fnComentsReg();" class="btn btn-primary btn-wd float-right" >Post Comment</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="boardCommentRslt">
+    [[${rslt}]]
+</th:block>
+
+</html>

@@ -1,0 +1,212 @@
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:with="http://www.thymeleaf.org/extras/with"
+      layout:decorate="~{layout/page-layout}"
+      with:title="">
+
+<th:block layout:fragment="page-content">
+    <div class="page-header header-filter header-small" data-parallax="true"
+         style="background-image: url('/img/bg9.jpg');">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 ml-auto mr-auto">
+                    <div class="text-center">
+                        <h3 class="title">EDUYAN 에서 가치를 높이세요</h3>
+                        <p class="description">
+                            학교에서 배우기 어렵거나 큰 비용을
+                            지불해야만 배울 수 있는 전문적인 지식들을 제공합니다.
+                            오픈 플랫폼의 이점을 통해 다양성과 경제성을 모두 높입니다..
+                        </p>
+                    </div>
+                    <div class="card card-raised card-form-horizontal">
+                        <div class="card-body ">
+                            <form method="" action="">
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-6 ">
+                          <span class="bmd-form-group"><div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">
+                                <i class="material-icons">search</i>
+                              </span>
+                            </div>
+                            <input type="search" value="" placeholder="검색" class="form-control">
+                          </div></span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 ">
+                                        <button type="button" class="btn btn-primary btn-block">검색</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main main-raised">
+        <div class="container">
+            <div class="section">
+                <!-- 카테고리별 -->
+                <div class="title">
+                    <h3 id="rotatingCards">카테고리별</h3>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-8 ml-auto mr-auto text-center">
+                        <ul class="nav nav-pills nav-pills-rose">
+                            <li class="nav-item" th:each="item, idx : ${categories}" >
+                                <a th:class="|nav-link  ${idx.index == 0 ? ' active show' : ''}|" th:href="|#tap${item.categoryId}|" data-toggle="tab" th:text="${item.categoryName}"></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="tab-content tab-space">
+                        <div th:each="item, idx: ${categories}"  th:class="|tab-pane  ${idx.index == 0 ? 'active' : ''}|"  th:id="|tap${item.categoryId}|">
+                            <div class="row">
+                                <div class="col-md-4"  th:each="cateinfo : ${cateTop}" th:if="${#strings.trim(cateinfo.CATEGORY_ID) == item.categoryId}" >
+                                    <div class="card card-blog  card-rotate">
+                                        <div class="card-header card-header-image">
+                                            <a th:href="@{/courses/course-detail(courseSeq=${cateinfo.courseSeq})}">
+                                                <img class="lazy"  th:src="${cateinfo.MAIN_IMG}" alt="" />
+                                            </a>
+                                            <div class="lazy colored-shadow"
+                                                 th:style="|background-image: url(${cateinfo.MAIN_IMG}); opacity: 1;|"></div>
+                                        </div>
+                                        <div class="card-body">
+                                            <h6 class="card-category text-warning" th:text="${item.categoryName}"></h6>
+                                            <h4 class="card-title">
+                                                <a  th:href="@{/courses/course-detail(courseSeq=${cateinfo.courseSeq})}" th:text="${cateinfo.TITLE}"></a>
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 자격증과정 -->
+                <div class="title">
+                    <h3 id="rotatingCards">자격증과정</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-4" th:each="item : ${license}">
+                        <div class="rotating-card-container" style="margin-bottom: 30px;">
+                            <div class="card card-rotate card-background">
+                                <div class="front front-background lazy"
+                                     th:style="|background-image: url(${item.MAIN_IMG}); width: 350px;|">
+                                    <div class="card-body">
+                                        <h6 class="card-category" th:text="${item.categoryName}"></h6>
+                                        <a href="#pablo">
+                                            <h3 class="card-title" th:text="${item.TITLE}">This Background Card Will Rotate on Hover</h3>
+                                        </a>
+                                        <p class="card-description" th:text="${item.INTROD}"></p>
+                                    </div>
+                                </div>
+                                <div class="back back-background"
+                                     th:style="|background-image: url(${item.MAIN_IMG}); width: 350px;|">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            Manage Post
+                                        </h5>
+                                        <p class="card-description" th:text="${item.INTROD}"></p>
+                                        <div class="footer text-center">
+                                            <a  th:href="@{/courses/course-detail(courseSeq=${item.courseSeq})}" class="btn btn-info btn-just-icon btn-fill btn-round">
+                                                <i class="material-icons">GO</i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 신규강의 -->
+                <div class="title">
+                    <h3 id="rotatingCards">신규강의</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-4" th:each="item : ${newCours}">
+                        <div class="card card-plain card-blog">
+                            <div class="card-header card-header-image">
+                                <a  th:href="@{/courses/course-detail(courseSeq=${item.courseSeq})}">
+                                    <img class="img img-raised lazy" th:src="${item.MAIN_IMG}" />
+                                </a>
+                                <div class="colored-shadow"
+                                     th:style="|background-image: url(${item.MAIN_IMG}); opacity: 1;|"></div>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-category text-info" th:text="${item.categoryName}"></h6>
+                                <h4 class="card-title">
+                                    <a href="#pablo" th:text="${item.TITLE}"></a>
+                                </h4>
+                                <p class="card-description">[[${item.INTROD}]]
+                                    <a  th:href="@{/courses/course-detail(courseSeq=${item.courseSeq})}"> 상세보기 </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 댓글 TOP 3-->
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 ml-auto mr-auto">
+                        <div class="section-description">
+                            <h2 class="title"> <i class="material-icons">chat</i> 문의</h2>
+                            <h5 class="description" >
+                                배우고 싶은 것이 있나요 ?</br>
+                                어떤걸 배울지, 어떤 강좌가 나에게 적절할지
+                                고민되신다면, 지금 문의해 주세요.
+                            </h5>
+                            <div class="github-section">
+                                <div class="git-demo float-left">
+                                    <a href="https://github.com/creativetimofficial/ct-material-kit-pro" target="_blank"
+                                       class="btn btn-rose btn-round">강의문의</a>
+                                </div>
+                                <div class="git-button float-right">
+                                    <!-- Star on GitHub -->
+                                    <span></span>
+                                    <!-- Fork on GitHub -->
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-md-9 ml-auto">
+                        <div class="col-md-12 ml-auto mr-auto">
+                            <div class="media-area">
+                                <h3 class="title text-center">최신 TOP 3 댓글</h3>
+                                <div class="media" th:each="item : ${boadList}">
+                                    <a class="float-left" href="#pablo">
+                                        <div class="avatar">
+                                            <img class="media-object" src="/img/placeholder.jpg" alt="...">
+                                        </div>
+                                    </a>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            [[${item.UserId}]]
+                                            <small>·[[${item.RegDate}]]</small>
+                                        </h4>
+                                        <p th:utext="${item.Content}"> </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="custom-script">
+    <script type="text/javascript">
+
+    </script>
+</th:block>
+</html>

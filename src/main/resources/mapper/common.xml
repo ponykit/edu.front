@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.front.dao.CommonDao">
+    <select id="selectCommonCodeList" resultType="com.edu.front.model.common.CommonCode">
+    SELECT  CODE
+            , CODE_NAME
+    FROM   TB_COMMON_CODE
+    </select>
+
+    <select id="selectCategoryList" resultType="com.edu.front.model.common.Category">
+    SELECT  CATEGORY_ID
+            , CATEGORY_UPPER
+            , CATEGORY_NAME
+            , CATEGORY_ICON
+    FROM    TB_CATEGORY
+    </select>
+
+</mapper>

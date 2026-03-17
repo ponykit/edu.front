@@ -1,0 +1,416 @@
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:with="http://www.thymeleaf.org/extras/with"
+      layout:decorate="~{layout/page-layout}"
+      with:title="강의정보">
+
+<th:block layout:fragment="page-content">
+
+    <div class="product-page">
+        <div class="page-header header-filter" data-parallax="true"
+             style="background-image: url('/img/bg6.jpg');">
+        </div>
+        <div class="section">
+            <div class="container">
+                <div class="main main-raised main-product">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="tab-content">
+                                <div th:class="|tab-pane ${idx.index == 0 ? ' active' : ''}|"  th:each="item, idx : ${courseDetail.courseDetail}" th:id="|page${item.courseDtlSeq}|">
+                                    <img th:src="${item.thumbnailUrl}" />
+                                </div>
+                            </div>
+                            <ul class="nav flexi-nav" data-tabs="tabs" id="flexiselDemo1">
+                                <li class="nav-item" th:each="item, idx : ${courseDetail.courseDetail}" >
+                                    <a th:href="|#page${item.courseDtlSeq}|" class="nav-link" data-toggle="tab">
+                                        <img th:src="${item.thumbnailUrl}" width="80" height="80" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <h2 class="title" th:text="${courseDetail.title}"></h2>
+                            <h3 class="main-price" th:text="|￦ ${courseDetail.price == '0' ? '무료': courseDetail.price}|"></h3>
+                            <div id="accordion" role="tablist">
+                                <div class="card card-collapse">
+                                    <div class="card-header" role="tab" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <a data-toggle="collapse" href="#collapseOne" aria-expanded="true"
+                                               aria-controls="collapseOne">
+                                                간단소개
+                                                <i class="material-icons">keyboard_arrow_down</i>
+                                            </a>
+                                        </h5>
+                                    </div>
+                                    <div id="collapseOne" class="collapse show" role="tabpanel"
+                                         aria-labelledby="headingOne" data-parent="#accordion">
+                                        <div class="card-body">
+                                            <p th:utext="${courseDetail.introd}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row pick-size">
+                                <div class="col-md-12 col-sm-12">
+                                    <label>온라인/오프라인</label>
+                                    <select class="selectpicker" data-style="select-with-transition" data-size="7">
+                                        <option value="1">온라인</option>
+                                        <option value="2">오프라인</option>
+                                        <option value="3">온라인&오프라인</option>
+                                    </select>
+                                </div>
+
+                            </div>
+<!--                            <div class="row pull-right">-->
+<!--                                <button class="btn btn-rose btn-round">수강신청 &#xA0;<i class="material-icons">shopping_cart</i>-->
+<!--                                </button>-->
+<!--                            </div>-->
+                        </div>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="card card-nav-tabs">
+                            <div class="card-header card-header-danger">
+                                <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+                                <div class="nav-tabs-navigation">
+                                    <div class="nav-tabs-wrapper">
+                                        <ul class="nav nav-tabs" data-tabs="tabs">
+                                            <li class="nav-item">
+                                                <a class="nav-link  active show" href="#profile" data-toggle="tab">
+                                                    <i class="material-icons">face</i>
+                                                    상세정보
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#curriculum" data-toggle="tab">
+                                                    <i class="material-icons">build</i>
+                                                    교육과정
+                                                    <div class="ripple-container"></div>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#messages" data-toggle="tab">
+                                                    <i class="material-icons">chat</i>
+                                                    강의후기
+                                                    <div class="ripple-container"></div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body ">
+                                <div class="tab-content text-center">
+                                    <div class="tab-pane active show" id="profile">
+                                        <p th:utext="${courseDetail.contentDetail}"></p>
+                                    </div>
+                                    <div class="tab-pane" id="curriculum">
+                                        <div class="card card-plain">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-shopping">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="text-center"></th>
+                                                            <th class="text-center" scope="col">강의명</th>
+                                                            <th class="text-center" scope="col">시간</th>
+                                                            <th class="ext-center" scope="col">미리보기기</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr th:each="item : ${courseDetail.courseDetail}">
+                                                            <td>
+                                                                <div class="img-container">
+                                                                    <img th:src="${item.thumbnailUrl}" alt="...">
+                                                                </div>
+                                                            </td>
+                                                            <td class="td-name text-left">
+                                                                <a href="#jacket" th:text="${item.unitTitle}"></a>
+                                                            </td>
+                                                            <td>
+                                                                Red
+                                                            </td>
+                                                            <td class="td-actions">
+                                                                <button type="button" rel="tooltip"
+                                                                        data-placement="left" title=""
+                                                                        class="btn btn-link btnPreview"
+                                                                        data-toggle="modal" data-target="#videoModal"
+                                                                        th:rel="${item.fileUrl}"
+                                                                        data-original-title="미리보기">
+                                                                    <i class="material-icons">slideshow</i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="messages">
+                                        <div class="row">
+                                            <div class="col-md-8 ml-auto mr-auto" id="list">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="related-products" style="display:none">
+                    <h3 class="title text-center">비슷한 강의</h3>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card card-product">
+                                <div class="card-header card-header-image">
+                                    <a href="#pablo">
+                                        <img class="img" src="/img/examples/card-product1.jpg">
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-category text-rose">Trending</h6>
+                                    <h4 class="card-title">
+                                        <a href="#pablo">Dolce &amp; Gabbana</a>
+                                    </h4>
+                                    <div class="card-description">
+                                        Dolce &amp; Gabbana's 'Greta' tote has been crafted in Italy from hard-wearing
+                                        red textured-leather.
+                                    </div>
+                                </div>
+                                <div class="card-footer justify-content-between">
+                                    <div class="price">
+                                        <h4>$1,459</h4>
+                                    </div>
+                                    <div class="stats">
+                                        <button type="button" rel="tooltip" title="Saved to Wishlist"
+                                                class="btn btn-just-icon btn-link btn-rose">
+                                            <i class="material-icons">favorite</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card card-product">
+                                <div class="card-header card-header-image">
+                                    <a href="#pablo">
+                                        <img class="img" src="/img/examples/card-product3.jpg">
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-category text-muted">Popular</h6>
+                                    <h4 class="card-title">
+                                        <a href="#pablo">Balmain</a>
+                                    </h4>
+                                    <div class="card-description">
+                                        Balmain's mid-rise skinny jeans are cut with stretch to ensure they retain their
+                                        second-skin fit but move comfortably.
+                                    </div>
+                                </div>
+                                <div class="card-footer justify-content-between">
+                                    <div class="price">
+                                        <h4>$459</h4>
+                                    </div>
+                                    <div class="stats">
+                                        <button type="button" rel="tooltip" title="Save to Wishlist"
+                                                class="btn btn-just-icon btn-link">
+                                            <i class="material-icons">favorite</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card card-product">
+                                <div class="card-header card-header-image">
+                                    <a href="#pablo">
+                                        <img class="img" src="/img/examples/card-product4.jpg">
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-category text-muted">Popular</h6>
+                                    <h4 class="card-title">
+                                        <a href="#pablo">Balenciaga</a>
+                                    </h4>
+                                    <div class="card-description">
+                                        Balenciaga's black textured-leather wallet is finished with the label's iconic
+                                        'Giant' studs. This is where you can...
+                                    </div>
+                                </div>
+                                <div class="card-footer justify-content-between">
+                                    <div class="price">
+                                        <h4>$590</h4>
+                                    </div>
+                                    <div class="stats">
+                                        <button type="button" rel="tooltip" title=""
+                                                class="btn btn-just-icon btn-link btn-rose"
+                                                data-original-title="Saved to Wishlist">
+                                            <i class="material-icons">favorite</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card card-product">
+                                <div class="card-header card-header-image">
+                                    <a href="#pablo">
+                                        <img class="img" src="/img/examples/card-product2.jpg">
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-category text-rose">Trending</h6>
+                                    <h4 class="card-title">
+                                        <a href="#pablo">Dolce &amp; Gabbana</a>
+                                    </h4>
+                                    <div class="card-description">
+                                        Dolce &amp; Gabbana's 'Greta' tote has been crafted in Italy from hard-wearing
+                                        red textured-leather.
+                                    </div>
+                                </div>
+                                <div class="card-footer justify-content-between">
+                                    <div class="price">
+                                        <h4>$1,459</h4>
+                                    </div>
+                                    <div class="stats">
+                                        <button type="button" rel="tooltip" title=""
+                                                class="btn btn-just-icon btn-link btn-default"
+                                                data-original-title="Save to Wishlist">
+                                            <i class="material-icons">favorite</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-signup" role="document">
+            <div class="modal-content">
+                <div class="card card-signup card-plain">
+                    <div class="modal-header">
+                        <h3 class="modal-title card-title"></h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="material-icons">clear</i>
+                        </button>
+                    </div>
+                    <div id="videoBody" class="modal-body">
+                        <div class="ml-auto">
+                            <video id="vdPreview" src="/common/filepreview/Glacier Express - 45569.mp4" controls="controls"  width="100%" height="100vh" > &gt;</video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="custom-script">
+    <script th:src="@{/js/common/underscope-min.js}"></script>
+    <script th:src="@{/js/common/common.js}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            fnComents(1);
+
+            $("#flexiselDemo1").flexisel({
+                visibleItems: 4,
+                itemsToScroll: 1,
+                animationSpeed: 400,
+                enableResponsiveBreakpoints: true,
+                responsiveBreakpoints: {
+                    portrait: {
+                        changePoint: 480,
+                        visibleItems: 3
+                    },
+                    landscape: {
+                        changePoint: 640,
+                        visibleItems: 3
+                    },
+                    tablet: {
+                        changePoint: 768,
+                        visibleItems: 3
+                    }
+                }
+            });
+
+            $("#btncomment").click(fnComentsReg);
+
+            $(".btnPreview").click(function () {
+                $("#vdPreview").attr("src", $(this).attr("rel") );
+            });
+
+            var $video  = $('video'),
+                $window = $(window);
+
+            //영상 리사이즈
+            $(window).resize(function(){
+
+                var height = $window.height() / 2;
+                $video.css('height', height);
+
+                var videoWidth = $video.width(),
+                    windowWidth = $window.width() ,
+                    marginLeftAdjust =   (windowWidth - videoWidth) / 2;
+
+                $video.css({
+                    'height': height
+                });
+            }).resize();
+
+        });
+
+        var fnComents = function (current) {
+            var req = {
+                "Current" : current
+            };
+            var params = {
+                url: "/board/board-comment/00004",
+                type: "POST",
+                contentType : "application/json",
+                dataType: "html",
+                data: JSON.stringify(req),
+                success: function (response) {
+                    $("#list").empty();
+                    $("#list").html(response);
+                }
+            };
+
+            COMMON.ajaxSyncJson(params);
+        }
+
+        var fnComentsReg = function () {
+            var req = {
+                "Content" : $("#txtcomment").val(),
+                "BoCate" : "00004",
+                "LinqSeq" : "[[${courseDetail.courseSeq}]]"
+
+            };
+            var params = {
+                url: "/board/board-comment/create",
+                type: "POST",
+                contentType : "application/json",
+                dataType: "json",
+                data: JSON.stringify(req),
+                success: function (response) {
+
+                    alert(response);
+                }
+            };
+
+            COMMON.ajaxSyncJson(params);
+        }
+    </script>
+
+</th:block>
+</html>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.front.dao.FrontDao">
+
+    <select id="selectMainList" parameterType="map" resultType="map">
+        <include refid="PaginationMapper.header"/>
+        SELECT A.COURSE_SEQ as courseSeq
+        , A.TITLE
+        , A.CATEGORY_ID
+        , B.CATEGORY_NAME AS  categoryName
+        , A.MAIN_IMG
+        , A.PRICE
+        , A.BADGE
+        , A.INTROD
+        , A.DISPLAY_YN    AS  displayYn
+        , A.REG_DT        AS  regDt
+        FROM TB_COURSE A
+        INNER JOIN TB_CATEGORY B ON A.CATEGORY_ID = B.CATEGORY_ID
+        WHERE 1 = 1
+        <if test='categoryId != "" and categoryId != null'>
+        AND         B.CATEGORY_ID   = #{categoryId}
+        </if>
+        <include refid="PaginationMapper.footer">
+            <property name="SortBy" value="${SortBy}"/>
+            <property name="SortDirection" value="${SortDirection}"/>
+        </include>
+
+    </select>
+
+    <select id="selectCourseList" parameterType="map" resultType="com.edu.front.model.course.Course">
+        <include refid="PaginationMapper.header"/>
+        SELECT A.COURSE_SEQ as courseSeq
+        , A.TITLE
+        , A.CATEGORY_ID
+        , B.CATEGORY_NAME AS  categoryName
+        , A.PRICE
+        , A.MAIN_IMG
+        , A.BADGE
+        , A.DISPLAY_YN    AS  displayYn
+        , A.REG_DT        AS  regDt
+        FROM TB_COURSE A
+        INNER JOIN TB_CATEGORY B ON A.CATEGORY_ID = B.CATEGORY_ID
+        WHERE 1 = 1
+        <if test='startDate != "" and startDate != null and endDate != "" and endDate != null'>
+            AND   A.REG_DT BETWEEN  CAST(CONCAT(#{startDate}, ' 00:00:00') AS DATETIME)  AND CAST(CONCAT(#{endDate}, ' 23:59:59') AS DATETIME)
+        </if>
+        <if test='title != "" and title != null '>
+            AND   A.TITLE LIKE #{title} + '%'
+        </if>
+        <include refid="PaginationMapper.footer">
+            <property name="SortBy" value="${SortBy}"/>
+            <property name="SortDirection" value="${SortDirection}"/>
+        </include>
+    </select>
+
+    <select id="selectCourseInfo" parameterType="map"  resultType="com.edu.front.model.course.Course">
+        SELECT A.COURSE_SEQ
+        , A.TITLE
+        , A.CATEGORY_ID
+        , A.PRICE
+        , A.BADGE
+        , A.DISPLAY_YN
+        , A.INTROD
+        , A.MAIN_IMG
+        , A.CONTENT_DETAIL
+        , A.REG_DT
+        FROM TB_COURSE A
+        WHERE   A.COURSE_SEQ = #{courseSeq}
+    </select>
+
+    <select id="selectCourseDetailInfo" parameterType="map"  resultType="com.edu.front.model.course.CourseDetail">
+        SELECT   A.COURSE_DTL_SEQ
+                 , A.COURSE_SEQ
+                 , A.UNIT_TITLE
+                 , A.DISPLAY_YN
+                 , A.SORT
+                 , A.FILE_SEQ
+                 , B.FILE_NAME
+                 , B.FILE_URL
+                 , B.FILE_SIZE
+                 , B.THUMBNAIL_URL
+        FROM    TB_COURSE_DETAIL A
+        OUTER APPLY (
+            SELECT   F.FILE_SEQ
+                    , F.FILE_NAME
+                    , F.FILE_URL
+                    , F.FILE_SIZE
+                    , F.USE_YN
+                    , F.THUMBNAIL_URL
+            FROM    TB_FILES F
+            WHERE   F.FILE_SEQ = A.FILE_SEQ
+        ) B
+        WHERE   A.COURSE_SEQ = #{courseSeq}
+    </select>
+
+    <select id="selectBBSList" statementType="CALLABLE" parameterType="map" resultType="map">
+        <include refid="PaginationMapper.header"/>
+        SELECT
+        A.BoNode
+        , A.BoNode.ToString()						AS BoNodeText
+        , A.BoNode.GetAncestor(0).ToString()		AS ParentNode
+        , A.BoLevel
+        , A.BoNum
+        , A.BoCate
+        , dbo.GetCodeNm('BoCate', A.BoCate)		AS BoCateNM
+        , A.LinqSeq
+        , A.Subject
+        , A.UserId
+        , A.Content
+        , CONVERT(VARCHAR(16), A.RegDt, 121)	AS RegDate
+        , CASE WHEN A.BoLevel = 1 THEN (	SELECT	COUNT(*)
+        FROM	TB_BOARD B
+        WHERE	B.BoNode.ToString()	LIKE A.BoNode.ToString() + '%' ) -1
+        ELSE 0 END AS CommentCnt
+        , (	SELECT	COUNT(*)
+        FROM	dbo.TB_FILES AS BM
+        WHERE	BM.CON_SEQ = A.BoNum)				AS FileCnt
+        , COUNT(*) OVER()   AS BoRowCnt
+        FROM		 dbo.TB_BOARD A
+        WHERE 1 = 1
+        <if test='startDate != "" and startDate != null and endDate != "" and endDate != null'>
+            AND A.RegDt BETWEEN CAST(#{startDate} AS date) AND dateadd(day, 1 , CAST(#{endDate} AS date))
+        </if>
+        <if test='title != "" and title != null '>
+            AND A.Subject LIKE #{title} + '%'
+        </if>
+        <if test='boardType != "" and boardType != null '>
+            AND A.BoCate = #{boardType}
+        </if>
+        <if test='ParentNode != "" and ParentNode != null '>
+            AND A.BoNode.ToString()	LIKE #{ParentNode} + '%'
+        </if>
+        <if test='LinqSeq != "" and LinqSeq != null '>
+            AND A.LinqSeq =  #{LinqSeq}
+        </if>
+
+        <include refid="PaginationMapper.footer">
+            <property name="SortBy" value="${SortBy}"/>
+            <property name="SortDirection" value="${SortDirection}"/>
+        </include>
+    </select>
+
+    <select id="selectBBSDetail" statementType="CALLABLE" parameterType="map" resultType="map">
+		SELECT		boA.BoNum
+                    , boA.BoCate
+                    , dbo.GetCodeNm('BoCate', boA.BoCate)		AS BoCateNM
+                    , boA.Subject
+                    , boA.Content
+                    , boA.UserId
+                    , boA.BoNode.ToString()						AS BoNodeText
+                    , boA.BoNode.GetAncestor(0).ToString()		AS ParentNode
+                    , CONVERT(VARCHAR(16), boA.RegDt, 121)	AS RegDate
+				    , ''			AS ImageList
+         FROM		dbo.TB_BOARD	AS boA
+         WHERE		BoNum	= #{BoNum}
+	</select>
+
+    <insert id="insertBBS" statementType="CALLABLE" parameterType="map">
+		{call BOARD_COMMON_INSERT(
+            #{BoNum, mode=IN, jdbcType=INTEGER, javaType=int},
+            #{BoCate, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{BizCode, mode=IN, jdbcType=INTEGER, javaType=int},
+            #{LinqSeq, mode=IN, jdbcType=INTEGER, javaType=int},
+            #{Subject, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{Content, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{UserId, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{UserPwd, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{UserName, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{UserEmail, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{UserHomepage, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{UserContact, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{UserIp, mode=IN, jdbcType=VARCHAR, javaType=string}
+		)}
+	</insert>
+
+    <update id="updateBBS" statementType="CALLABLE" parameterType="map">
+		{call BOARD_ADMIN_UPDATE(
+            #{BoNum, mode=IN, jdbcType=INTEGER, javaType=int},
+            #{BoCate, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{BizCode, mode=IN, jdbcType=INTEGER, javaType=int},
+            #{Subject, mode=IN, jdbcType=VARCHAR, javaType=string},
+            #{Content, mode=IN, jdbcType=VARCHAR, javaType=string}
+		)}
+	</update>
+</mapper>

@@ -1,0 +1,125 @@
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:with="http://www.thymeleaf.org/extras/with"
+      layout:decorate="~{layout/page-layout}"
+      with:title="커뮤니티">
+
+<th:block layout:fragment="page-content">
+    <div class="mt-5 bg-white">
+
+        <div class="section mt-5">
+            <div class="container">
+                <h2 class="section-title">커뮤니티</h2>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card card-refine card-plain card-rose">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    커뮤니티
+
+                                    <button class="btn btn-default btn-fab btn-fab-mini btn-link pull-right"
+                                            rel="tooltip" title="" data-original-title="Refresh">
+                                        <i class="material-icons">cached</i>
+                                    </button>
+                                </h5>
+                                <div class="row">
+                                    <div class="card card-collapse">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+                                                <a href="/board/board-list/00001"
+                                                   th:aria-expanded="${#strings.contains(#httpServletRequest.servletPath,'00001')}">
+                                                    묻고답하기 </a>
+                                            </h5>
+                                        </div>
+
+                                    </div>
+                                    <div class="card card-collapse">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+                                                <a href="/board/board-list/00002"
+                                                   th:aria-expanded="${#strings.contains(#httpServletRequest.servletPath,'00002')}">
+                                                    교육블로그 </a>
+                                            </h5>
+                                        </div>
+
+                                    </div>
+                                    <div class="card card-collapse">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+                                                <a href="/board/board-list/00003"
+                                                   th:aria-expanded="${#strings.contains(#httpServletRequest.servletPath,'00003')}">
+                                                    교육정보 </a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9 ml-auto mr-auto">
+
+                        <div  class="card card-plain card-blog">
+                            <div class="text-center">
+                                <h5 th:if="${#lists.size(itemLst) == 0}">조회된 결과가 없습니다.</h5>
+                            </div>
+                            <div class="row" >
+                                <div class="col-md-12" th:each="item : ${itemLst}">
+
+                                    <h6 class="card-category text-info" th:text="${item.BoCateNM}">Enterprise</h6>
+                                    <h3 class="card-title">
+                                        <a th:href="@{/board/board-detail(BoNum=${item.BoNum})}" th:text="${item.Subject}"></a>
+                                    </h3>
+                                    <p class="card-description" th:utext="${item.Content}">
+                                        <a href="#pablo"> Read More </a>
+                                    </p>
+                                    <p class="author">
+                                        by
+                                        <a href="#pablo">
+                                            <b th:text="${item.UserId}"></b>
+                                        </a>, [[${item.RegDate}]]
+                                    </p>
+                                    <hr>
+                                </div>
+                            </div>
+
+                            <div class="row ml-auto mr-auto mt-5" th:if="${#lists.size(itemLst) > 0}">
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <a class="page-link" th:href="@{${#httpServletRequest.servletPath}(Current=1)}"  aria-label="Previous">
+                                            <span aria-hidden="true">처음</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" th:href="@{${#httpServletRequest.servletPath}(Current=${pagination.prevBlock})}"  aria-label="Previous">
+                                            <span aria-hidden="true">이전</span>
+                                        </a>
+                                    </li>
+                                    <th:block  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}">
+                                        <li th:class="|page-item ${pagination.page == pageButton ? ' active' : ''}|"  th:with="start = ${pagination.startPage}, end = ${pagination.endPage}"  th:each="pageButton : ${#numbers.sequence(start, end)}">
+                                                <a class="page-link"  th:href="@{${#httpServletRequest.servletPath}(Current=${pageButton})}"   th:text="${pageButton}"></a>
+                                        </li>
+                                    </th:block>
+                                    <li class="page-item">
+                                        <a class="page-link" th:href="@{${#httpServletRequest.servletPath}(Current=${pagination.nextBlock})}"    aria-label="Next">
+                                            <span aria-hidden="true">다음</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" th:href="@{${#httpServletRequest.servletPath}(Current=${pagination.totalPageCnt})}"  aria-label="Previous">
+                                            <span aria-hidden="true">끝</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</th:block>
+
+</html>

@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:fragment="end">
+
+<!--   Core JS Files   -->
+<script  type="text/javascript" th:src="@{/js/core/jquery.min.js}"></script>
+<script  type="text/javascript" th:src="@{/js/core/popper.min.js}"></script>
+<script  type="text/javascript" th:src="@{/js/core/bootstrap-material-design.min.js}"></script>
+<script  type="text/javascript" th:src="@{/js/plugins/moment.min.js}"></script>
+
+<!--	Plugin for the Datepicker, full documentation here: https://github.com/Eonasdan/bootstrap-datetimepicker -->
+<script  type="text/javascript" th:src="@{/js/plugins/bootstrap-datetimepicker.js}"></script>
+<!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+<script  type="text/javascript" th:src="@{/js/plugins/nouislider.min.js}"></script>
+
+<!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+<script type="text/javascript" th:src="@{/js/plugins/bootstrap-tagsinput.js}"></script>
+<!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+<script type="text/javascript" th:src="@{/js/plugins/bootstrap-selectpicker.js}" ></script>
+<!--	Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+<script type="text/javascript" th:src="@{/js/plugins/jasny-bootstrap.min.js}"></script>
+<!--	Plugin for Small Gallery in Product Page -->
+<script type="text/javascript" th:src="@{/js/plugins/jquery.flexisel.js}"></script>
+<!-- Place this tag in your head or just before your close body tag. -->
+<script type="text/javascript" th:src="@{https://buttons.github.io/buttons.js}" async defer ></script>
+<!-- Control Center for Material Kit: parallax effects, scripts for the example pages etc -->
+<script type="text/javascript" th:src="@{/js/material-kit.js(v=2.1.1)}" ></script>
+<script>
+    $(window).bind('load', function() {
+        $('img').each(function() {
+            if( (typeof this.naturalWidth != "undefined" && this.naturalWidth == 0)
+                ||  this.readyState == 'uninitialized'                                  ) {
+                $(this).attr('src', '/img/image_placeholder.jpg');
+            }
+        });
+    });
+</script>
+</html>

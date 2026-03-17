@@ -1,0 +1,60 @@
+server:
+  address: localhost
+  port: 8080
+
+spring:
+  profiles:
+    active: local
+
+---
+
+spring:
+  profiles: local
+  thymeleaf:
+    prefix: file:edu.front/src/main/resources/templates/
+    cache: false
+
+  resources:
+    static-locations: file:edu.front/src/main/resources/static/
+
+  datasource:
+    url: ${DB_URL:jdbc:log4jdbc:sqlserver://localhost:1433;databaseName=edu}
+    username: ${DB_USERNAME:edu}
+    password: ${DB_PASSWORD:}
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+
+upload:
+  path: ${UPLOAD_PATH:/upload/files}
+
+---
+
+spring:
+  profiles: prod
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: true
+
+  resources:
+    static-locations: classpath:/static/
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+
+  devtools:
+    livereload:
+      enabled: false
+
+upload:
+  path: ${UPLOAD_PATH}
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: warn

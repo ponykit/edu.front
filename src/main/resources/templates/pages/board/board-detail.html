@@ -1,0 +1,189 @@
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:with="http://www.thymeleaf.org/extras/with"
+      layout:decorate="~{layout/page-layout}"
+      with:title="카트">
+
+<th:block layout:fragment="page-content">
+    <div class="mt-5 bg-white">
+        <div class="section mt-5">
+            <div class="container">
+                <h3 class="section-title">커뮤니티s</h3>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card card-refine card-plain card-rose">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    커뮤니티
+                                    <button class="btn btn-default btn-fab btn-fab-mini btn-link pull-right"
+                                            rel="tooltip" title="" data-original-title="Refresh">
+                                        <i class="material-icons">cached</i>
+                                    </button>
+                                </h5>
+                                <div class="row">
+                                    <div class="card card-collapse">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+                                                <a href="/board/board-list/00001"
+                                                   th:aria-expanded="${#strings.contains(detail.BoCate,'00001')}">
+                                                    묻고답하기 </a>
+                                            </h5>
+                                        </div>
+
+                                    </div>
+                                    <div class="card card-collapse">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+                                                <a href="/board/board-list/00002"
+                                                   th:aria-expanded="${#strings.contains(detail.BoCate,'00002')}">
+                                                    교육블로그 </a>
+                                            </h5>
+                                        </div>
+
+                                    </div>
+                                    <div class="card card-collapse">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+                                                <a href="/board/board-list/00003"
+                                                   th:aria-expanded="${#strings.contains(detail.BoCate,'00003')}">
+                                                    교육정보 </a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9 ml-auto mr-auto">
+                        <div class="card card-plain card-blog">
+                            <div class="row" th:if="${mode == 'reg'}">
+                                	<textarea id="contentWrite" name="contentWrite">
+				                			</textarea>
+                            </div>
+
+                            <div class="row" th:if="${mode == 'view'}">
+                                <div class="col-md-12">
+                                    <h6 class="card-category text-info" th:text="${detail.BoCateNM}"></h6>
+                                    <a href="#pablo" class="btn btn-primary btn-link float-right"
+                                       rel="tooltip" title="" data-original-title="LIST GO"
+                                       aria-describedby="tooltip81358">
+                                        <i class="material-icons">reply</i> 뒤로
+                                    </a>
+                                    <h3 class="card-title">
+                                        <a href="/board/board-detail" th:text="${detail.Subject}"></a>
+                                    </h3>
+                                    <hr>
+                                    <p th:utext="${detail.Content}"></p>
+                                    <p class="author">
+
+                                        <a href="#pablo">
+                                            <b th:text="${detail.UserId}"></b>
+                                        </a>, [[${detail.RegDate}]]
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <div class="row" id="list">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+<th:block layout:fragment="custom-script" th:if="${mode == 'view'}">
+    <script th:src="@{/js/plugins/ckeditor.js}"></script>
+    <script th:src="@{/js/common/underscope-min.js}"></script>
+    <script th:src="@{/js/common/common.js}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            fnComents(1);
+
+            $("#btncomment").click(fnComentsReg);
+        });
+
+        var fnComents = function (current) {
+            var req = {
+                "Current" : current,
+                "ParentNode" : "[[${detail.ParentNode}]]"
+            };
+            var params = {
+                url: "/board/board-comment/[[${detail.BoCate}]]",
+                type: "POST",
+                contentType : "application/json",
+                dataType: "html",
+                data: JSON.stringify(req),
+                success: function (response) {
+                    $("#list").empty();
+                    $("#list").html(response);
+                }
+            };
+
+            COMMON.ajaxSyncJson(params);
+        }
+
+        var fnComentsReg = function () {
+            var req = {
+                "Content" : $("#txtcomment").val(),
+                "BoNum" : [[${detail.BoNum}]],
+                "BoCate" : "[[${detail.BoCate}]]"
+             };
+            var params = {
+                url: "/board/board-comment/create",
+                type: "POST",
+                contentType : "application/json",
+                dataType: "json",
+                data: JSON.stringify(req),
+                success: function (response) {
+
+                    alert(response);
+                }
+            };
+
+            COMMON.ajaxSyncJson(params);
+        }
+    </script>
+
+    <script type="text/javascript" th:if="${mode == 'reg'}">
+        $(document).ready(function () {
+            ClassicEditor.create(document.querySelector('#contentWrite'), {
+                toolbar: {
+                    items: [
+                        'heading', '|', 'fontColor', 'fontSize', 'fontBackgroundColor', 'fontFamily', 'bold', 'italic',
+                        'bulletedList', 'numberedList', '|', 'indent', 'outdent', '|', 'insertTable'
+                    ]
+                },
+                language: 'ko',
+                table: {
+                    contentToolbar: [
+                        'tableColumn',
+                        'tableRow',
+                        'mergeTableCells'
+                    ]
+                },
+                licenseKey: '',
+            })
+                .then(editor => {
+                    window.editor = editor;
+                    editor.editing.view.change(writer => {
+                        writer.setStyle('height', '250px', editor.editing.view.document.getRoot());
+                        writer.setStyle('width', '100%', editor.editing.view.document.getRoot());
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
+    <style> .ck.ck-editor {
+        width: 100%;
+    } </style>
+</th:block>
+
+</html>

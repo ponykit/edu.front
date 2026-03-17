@@ -1,0 +1,273 @@
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:with="http://www.thymeleaf.org/extras/with"
+      layout:decorate="~{layout/page-layout}"
+      with:title="강의리스트">
+
+<th:block layout:fragment="page-content">
+    <div class="mt-5 bg-white">
+
+        <div class="section mt-5">
+            <div class="container">
+<!--                <h2 class="section-title">Find what you need</h2>-->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card card-refine card-plain card-rose">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    필터 초기화
+                                    <button class="btn btn-default btn-fab btn-fab-mini btn-link pull-right"
+                                            rel="tooltip" title="" data-original-title="필터 초기화">
+                                        <i class="material-icons">cached</i>
+                                    </button>
+                                </h5>
+                                <div id="accordion" role="tablist">
+                                    <div class="card card-collapse">
+                                        <div class="card-header" role="tab" id="headingOne">
+                                            <h5 class="mb-0">
+                                                <a data-toggle="collapse" href="#collapseOne" aria-expanded="true"
+                                                   aria-controls="collapseOne">
+                                                    카테고리
+                                                    <i class="material-icons">keyboard_arrow_down</i>
+                                                </a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseOne" class="collapse show" role="tabpanel"
+                                             aria-labelledby="headingOne">
+                                            <div class="card-body">
+                                                <div class="form-check" th:each="item : ${categories}">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="radio" value=""  th:checked="${#strings.contains(#httpServletRequest.getParameter('categoryId'), item.categoryId)} " >  [[${item.categoryName}]]
+                                                        <span class="form-check-sign">  <span class="check"></span>   </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card card-collapse">
+                                        <div class="card-header" role="tab" id="headingTwo">
+                                            <h5 class="mb-0">
+                                                <a class="collapsed" data-toggle="collapse" href="#collapseTwo"
+                                                   aria-expanded="false" aria-controls="collapseTwo">
+                                                    난이도
+                                                    <i class="material-icons">keyboard_arrow_down</i>
+                                                </a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse" role="tabpanel"
+                                             aria-labelledby="headingTwo">
+                                            <div class="card-body">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               checked>
+                                                        입문자
+                                                        <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value="">
+                                                        중급자
+                                                        <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value="">
+                                                        상급자
+                                                        <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card card-collapse">
+                                        <div class="card-header" role="tab" id="headingFour">
+                                            <h5 class="mb-0">
+                                                <a class="collapsed" data-toggle="collapse" href="#collapseFour"
+                                                   aria-expanded="false" aria-controls="collapseFour">
+                                                    유료/무료
+                                                    <i class="material-icons">keyboard_arrow_down</i>
+                                                </a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseFour" class="collapse" role="tabpanel"
+                                             aria-labelledby="headingFour">
+                                            <div class="card-body">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               checked>
+                                                        유료
+                                                        <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value="">
+                                                        무료
+                                                        <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card card-collapse">
+                                        <div class="card-header" role="tab" id="headingFive">
+                                            <h5 class="mb-0">
+                                                <a class="collapsed" data-toggle="collapse" href="#collapseFour"
+                                                   aria-expanded="false" aria-controls="collapseFour">
+                                                   온라인/오프라인
+                                                    <i class="material-icons">keyboard_arrow_down</i>
+                                                </a>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseFour" class="collapse" role="tabpanel"
+                                             aria-labelledby="collapseFour">
+                                            <div class="card-body">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               checked>
+                                                        온라인
+                                                        <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value="">
+                                                        오프라인
+                                                        <span class="form-check-sign">
+                              <span class="check"></span>
+                            </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-4" th:each="item : ${courseList}">
+                                <div class="card card-product card-plain no-shadow" data-colored-shadow="false">
+                                    <div class="card-header card-header-image">
+                                        <a th:href="@{/courses/course-detail(courseSeq=${item.courseSeq})}">
+                                            <img th:src="${item.mainImg}" alt="...">
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <a th:href="@{/courses/course-detail(courseSeq=${item.courseSeq})}">
+                                            <h4 class="card-title" th:src="${item.title}"></h4>
+                                        </a>
+                                        <p class="description" th:src="${item.introd}">
+                                        </p>
+                                    </div>
+                                    <div class="card-footer justify-content-between">
+                                        <div class="price-container">
+                                            <span class="price" th:text="|￦ ${item.price == '0' ? '무료': item.price}|"> </span>
+                                        </div>
+                                        <button class="btn btn-rose btn-link btn-fab btn-fab-mini btn-round pull-right"
+                                                rel="tooltip" title="" data-placement="left"
+                                                data-original-title="Remove from wishlist">
+                                            <i class="material-icons">favorite</i>
+                                        </button>
+                                    </div>
+                                </div> <!-- end card -->
+                            </div>
+                        </div>
+                        <div class="row" th:if="${#lists.size(courseList) > 16}">
+                            <div class="col-md-3 ml-auto mr-auto">
+                                <button rel="tooltip" class="btn btn-rose btn-round" data-original-title="" title="">
+                                    Load more...
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- section -->
+    </div> <!-- end-main-raised -->
+    <div class="section section-blog" style="display: none">
+        <div class="container">
+            <h2 class="section-title">추천강의</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card card-blog">
+                        <div class="card-header card-header-image">
+                            <a href="#pablo">
+                                <img src="/img/dg6.jpg" alt="">
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-category text-rose">Trends</h6>
+                            <h4 class="card-title">
+                                <a href="#pablo">Learn how to wear your scarf with a floral print shirt</a>
+                            </h4>
+                            <p class="card-description">
+                                Don't be scared of the truth because we need to restart the human foundation in truth
+                                And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-blog">
+                        <div class="card-header card-header-image">
+                            <a href="#pablo">
+                                <img src="/img/dg10.jpg" alt="">
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-category text-rose">Fashion week</h6>
+                            <h4 class="card-title">
+                                <a href="#pablo">Katy Perry was wearing a Dolce &amp; Gabanna arc dress</a>
+                            </h4>
+                            <p class="card-description">
+                                Don't be scared of the truth because we need to restart the human foundation in truth
+                                And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-blog">
+                        <div class="card-header card-header-image">
+                            <a href="#pablo">
+                                <img src="/img/dg9.jpg" alt="">
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-category text-rose">Fashion week</h6>
+                            <h4 class="card-title">
+                                <a href="#pablo">Check the latest fashion events and which are the trends</a>
+                            </h4>
+                            <p class="card-description">
+                                Don't be scared of the truth because we need to restart the human foundation in truth
+                                And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- section -->
+</th:block>
+</html>
